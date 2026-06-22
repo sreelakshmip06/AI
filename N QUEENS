@@ -1,0 +1,46 @@
+def n_queens_solver():
+    N = 4
+    try:
+        n_input = input("Enter the number of queens (e.g., 4): ")
+        N = int(n_input)
+    except Exception:
+        print(f"Invalid or no input. Using default N={N}.")
+
+    if N <= 0:
+        return
+
+    board = [[0]*N for _ in range(N)]
+    
+    def is_safe(board, row, col, N):
+        for i in range(col):
+            if board[row][i] == 1:
+                return False
+        for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+            if board[i][j] == 1:
+                return False
+        for i, j in zip(range(row, N, 1), range(col, -1, -1)):
+            if board[i][j] == 1:
+                return False
+        return True
+
+    def solve_util(board, col, N):
+        if col >= N:
+            return True
+        for i in range(N):
+            if is_safe(board, i, col, N):
+                board[i][col] = 1
+                if solve_util(board, col + 1, N):
+                    return True
+                board[i][col] = 0
+        return False
+
+    if solve_util(board, 0, N):
+        print(f"\nSolution for {N}-Queens (1=Queen):")
+        for row in board:
+            print(row)
+    else:
+        print(f"\nNo solution found for {N}-Queens.")
+
+if __name__ == "__main__":
+    print("\n\n--- 2. N QUEENS ---")
+    n_queens_solver()
